@@ -331,22 +331,6 @@ LEFT JOIN
 ORDER BY 
     question_id;
     
-SELECT 
-    q.question_id,
-    q.content AS question_content,
-    tq.type_name AS question_type,
-    a.full_name AS creator_name,
-    q.created_date AS question_created_date,
-    ans.content AS answer_content,
-    ans.is_correct AS is_answer_correct
-FROM 
-    question q
-JOIN 
-    type_question tq ON q.type_id = tq.type_id
-JOIN 
-    account a ON q.creator_id = a.account_id
-LEFT JOIN 
-    answer ans ON q.question_id = ans.question_id;
 -- Question 13: Lấy ra số lượng câu hỏi của mỗi loại tự luận hay trắc nghiệm
 SELECT type_question.*, COUNT(type_id)
 FROM question 
