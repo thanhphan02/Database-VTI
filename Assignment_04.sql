@@ -318,29 +318,35 @@ LEFT JOIN account USING (department_id, position_id)
 GROUP BY department_id, position_id;
 
 -- Question 12: Lấy thông tin chi tiết của câu hỏi bao gồm: thông tin cơ bản của question, loại câu hỏi, ai là người tạo ra câu hỏi, câu trả lời là gì, …
+SELECT q.*,type_question.type_name,category_question.category_name,answer.is_correct, account.username
+FROM question q
+ JOIN 
+    type_question USING(type_id)
+ JOIN 
+    category_question USING(category_id)
+ JOIN 
+    account  ON q.creator_id = account.account_id
+LEFT JOIN 
+    answer USING(question_id)
+ORDER BY 
+    question_id;
+    
 SELECT 
     q.question_id,
     q.content AS question_content,
-    q.created_date AS question_created_date,
     tq.type_name AS question_type,
-    c.category_name AS category_name,
-    a.account_id AS creator_id,
     a.full_name AS creator_name,
-    ans.answer_id,
+    q.created_date AS question_created_date,
     ans.content AS answer_content,
-    ans.is_correct
+    ans.is_correct AS is_answer_correct
 FROM 
     question q
 JOIN 
     type_question tq ON q.type_id = tq.type_id
 JOIN 
-    category_question c ON q.category_id = c.category_id
-JOIN 
     account a ON q.creator_id = a.account_id
 LEFT JOIN 
-    answer ans ON q.question_id = ans.question_id
-ORDER BY 
-    q.question_id, ans.answer_id;
+    answer ans ON q.question_id = ans.question_id;
 -- Question 13: Lấy ra số lượng câu hỏi của mỗi loại tự luận hay trắc nghiệm
 SELECT type_question.*, COUNT(type_id)
 FROM question 
